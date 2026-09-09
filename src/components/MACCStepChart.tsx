@@ -30,6 +30,16 @@ interface ChartDatum {
   leverIds: string[];
 }
 
+// Design tokens shared with MACCChartGuide's highlight cards, so hovering a
+// guide card and the chart element it describes always match in color.
+const AXIS_DEFAULT = '#96A6A4'; // mist-400
+const AXIS_LABEL_DEFAULT = '#71827F'; // mist-500
+const AXIS_LINE_DEFAULT = '#C2CECD'; // mist-300
+const X_HIGHLIGHT = '#0284C7'; // sky-600
+const Y_HIGHLIGHT = '#B45309'; // amber-700
+const CARBON_LINE = '#B5504B'; // rust-500
+const CARBON_LINE_ACTIVE = '#9B3E3A'; // rust-600
+
 export function MACCStepChart({
   frontierSteps,
   carbonPrice,
@@ -72,19 +82,19 @@ export function MACCStepChart({
             offset: -10,
             style: {
               fontSize: '12px',
-              fill: xHighlighted ? '#38bdf8' : '#64748b',
+              fill: xHighlighted ? X_HIGHLIGHT : AXIS_LABEL_DEFAULT,
               fontWeight: xHighlighted ? 700 : 400,
             },
           }}
-          stroke={xHighlighted ? '#38bdf8' : '#cbd5e1'}
+          stroke={xHighlighted ? X_HIGHLIGHT : AXIS_LINE_DEFAULT}
           strokeWidth={xHighlighted ? 2 : 1}
-          tick={{ fontSize: 11, fill: xHighlighted ? '#38bdf8' : '#94a3b8' }}
+          tick={{ fontSize: 11, fill: xHighlighted ? X_HIGHLIGHT : AXIS_DEFAULT }}
         />
         <YAxis
           tickFormatter={(v) => `€${v.toFixed(0)}`}
-          stroke={yHighlighted ? '#fbbf24' : '#cbd5e1'}
+          stroke={yHighlighted ? Y_HIGHLIGHT : AXIS_LINE_DEFAULT}
           strokeWidth={yHighlighted ? 2 : 1}
-          tick={{ fontSize: 11, fill: yHighlighted ? '#fbbf24' : '#94a3b8' }}
+          tick={{ fontSize: 11, fill: yHighlighted ? Y_HIGHLIGHT : AXIS_DEFAULT }}
           label={{
             value: '年化邊際減排成本 MAC (€/tCO₂)',
             angle: -90,
@@ -92,39 +102,42 @@ export function MACCStepChart({
             offset: 0,
             style: {
               fontSize: '12px',
-              fill: yHighlighted ? '#fbbf24' : '#64748b',
+              fill: yHighlighted ? Y_HIGHLIGHT : AXIS_LABEL_DEFAULT,
               fontWeight: yHighlighted ? 700 : 400,
             },
           }}
         />
         <Tooltip
-          cursor={{ fill: 'rgba(14, 165, 233, 0.05)' }}
+          cursor={{ fill: 'rgba(64, 128, 128, 0.06)' }}
           content={({ active, payload }) => {
             if (!active || !payload || payload.length === 0) return null;
             const d = payload[0].payload as ChartDatum;
             return (
-              <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-lg">
-                <p className="mb-1 text-sm font-bold text-slate-700">
+              <div className="rounded-lg border border-mist-200 bg-white p-3 shadow-lg">
+                <p className="mb-1 text-sm font-bold text-mist-700">
                   技術組合 [{d.leverIds.join(' + ')}]
                 </p>
-                <div className="space-y-0.5 text-xs text-slate-500">
+                <div className="space-y-0.5 text-xs text-mist-500">
                   <p>
                     <span className="font-medium">減碳量：</span>{' '}
-                    {fmtNumber(d.abatement)} tCO₂/年 ({d.abatementPct.toFixed(1)}%)
+                    <span className="font-mono">
+                      {fmtNumber(d.abatement)} tCO₂/年 ({d.abatementPct.toFixed(1)}%)
+                    </span>
                   </p>
                   <p>
-                    <span className="font-medium">邊際成本 MAC：</span> €{d.mac.toFixed(0)}/tCO₂
+                    <span className="font-medium">邊際成本 MAC：</span>{' '}
+                    <span className="font-mono">€{d.mac.toFixed(0)}/tCO₂</span>
                   </p>
                   <p>
-                    <span className="font-medium">折現支出 DE：</span> €{fmtCurrency(d.de)}
+                    <span className="font-medium">折現支出 DE：</span>{' '}
+                    <span className="font-mono">€{fmtCurrency(d.de)}</span>
                   </p>
                   <p>
-                    <span className="font-medium">總減碳成本 TAC：</span> €{fmtCurrency(d.tac)}
+                    <span className="font-medium">總減碳成本 TAC：</span>{' '}
+                    <span className="font-mono">€{fmtCurrency(d.tac)}</span>
                   </p>
                   {d.isOptimal && (
-                    <p className="mt-1 font-semibold text-emerald-600">
-                      當前碳價下之最優組合
-                    </p>
+                    <p className="mt-1 font-semibold text-brand-600">當前碳價下之最優組合</p>
                   )}
                 </div>
               </div>
@@ -133,13 +146,13 @@ export function MACCStepChart({
         />
         <ReferenceLine
           y={carbonPrice}
-          stroke={lineHighlighted ? '#f87171' : '#ef4444'}
+          stroke={lineHighlighted ? CARBON_LINE_ACTIVE : CARBON_LINE}
           strokeWidth={lineHighlighted ? 3.5 : 2}
           strokeDasharray="8 4"
           label={{
             value: `碳價 = €${carbonPrice}/tCO₂`,
             position: 'right',
-            fill: lineHighlighted ? '#f87171' : '#ef4444',
+            fill: lineHighlighted ? CARBON_LINE_ACTIVE : CARBON_LINE,
             fontSize: 11,
             fontWeight: 600,
           }}
@@ -156,11 +169,11 @@ export function MACCStepChart({
             };
             const { x, y, width, height, payload } = p;
             const color = payload.isOptimal
-              ? '#10b981'
+              ? '#2D5A5A' // brand-700
               : payload.isBelowCarbonPrice
-                ? '#0ea5e9'
-                : '#94a3b8';
-            const opacity = payload.isOptimal ? 1 : payload.isBelowCarbonPrice ? 0.7 : 0.45;
+                ? '#96B9B9' // brand-300
+                : '#C2CECD'; // mist-300
+            const opacity = payload.isOptimal ? 1 : payload.isBelowCarbonPrice ? 0.9 : 0.6;
             const flash = stepHighlighted;
             return (
               <g>
@@ -170,9 +183,9 @@ export function MACCStepChart({
                   width={width}
                   height={height}
                   fill={color}
-                  opacity={flash ? Math.min(opacity + 0.3, 1) : opacity}
+                  opacity={flash ? Math.min(opacity + 0.15, 1) : opacity}
                   rx={3}
-                  stroke={flash ? '#34d399' : 'none'}
+                  stroke={flash ? '#408080' : 'none'}
                   strokeWidth={flash ? 1.5 : 0}
                 />
                 {payload.isOptimal && (
@@ -182,7 +195,7 @@ export function MACCStepChart({
                     width={width + 2}
                     height={height + 2}
                     fill="none"
-                    stroke="#059669"
+                    stroke="#1A3333"
                     strokeWidth={2}
                     rx={3}
                   />

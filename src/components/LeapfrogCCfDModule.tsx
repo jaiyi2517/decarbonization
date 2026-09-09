@@ -20,15 +20,15 @@ export function LeapfrogCCfDModule({
     <div className="space-y-4">
       {/* Leapfrog Warning Banner */}
       {isLeapfrog && crossesThreshold && (
-        <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-gradient-to-r from-red-50 to-orange-50 p-4 shadow-sm">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-600">
+        <div className="flex items-start gap-3 rounded-xl border border-rust-200 bg-rust-50 p-4 shadow-sm">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-rust-100 text-rust-600">
             <AlertTriangle className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-sm font-bold text-red-700">
+            <p className="text-sm font-bold text-rust-700">
               警訊：碳價已達 €{carbonPrice.toFixed(0)}/tCO₂ 臨界值！
             </p>
-            <p className="mt-1 text-sm text-red-600">
+            <p className="mt-1 text-sm text-rust-600">
               建議避開過渡期 LEILAC 技術，直接越級投資「鈣循環 (Calcium Looping)」以獲取長期最大經濟效益。
             </p>
           </div>
@@ -37,13 +37,13 @@ export function LeapfrogCCfDModule({
 
       {/* Leapfrog status (when not triggered) */}
       {!isLeapfrog && (
-        <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+        <div className="flex items-start gap-3 rounded-xl border border-mist-200 bg-white p-4 shadow-sm">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
             <AlertTriangle className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-slate-700">尚未觸發技術越級 (Leapfrog)</p>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="text-sm font-semibold text-mist-700">尚未觸發技術越級 (Leapfrog)</p>
+            <p className="mt-1 text-sm text-mist-500">
               {kpis.nextLeverMAC !== null
                 ? `下一階技術 MAC：€${kpis.nextLeverMAC.toFixed(0)}/tCO₂ — 當前碳價 (€${carbonPrice.toFixed(0)}/tCO₂) 尚未跨越越級臨界點。`
                 : '目前無更深層的減碳技術可供選擇。'}
@@ -53,35 +53,35 @@ export function LeapfrogCCfDModule({
       )}
 
       {/* CCfD Subsidy Module */}
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="rounded-xl border border-mist-200 bg-white p-4 shadow-sm">
         <div className="mb-3 flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
             <Layers className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-slate-700">碳差價合約 (Carbon Contract for Difference, CCfD)</h3>
-            <p className="text-xs text-slate-400">
+            <h3 className="text-sm font-semibold text-mist-700">碳差價合約 (Carbon Contract for Difference, CCfD)</h3>
+            <p className="text-xs text-mist-400">
               邁向淨零所需的最低年度定額補貼金額
             </p>
           </div>
         </div>
 
         {kpis.ccfdBreakdown.length === 0 ? (
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-mist-400">
             目前無更深層的減碳步驟可供選擇 — 當前最優解已接近或達到最大前緣。
           </p>
         ) : (
           <div className="space-y-2">
             <div className="flex items-center justify-between rounded-lg bg-indigo-50 px-3 py-2">
               <span className="text-sm font-medium text-indigo-700">年度 CCfD 補貼總需求</span>
-              <span className="text-lg font-bold text-indigo-700">
+              <span className="font-mono text-lg font-bold text-indigo-700">
                 €{fmtCurrency(kpis.ccfdSubsidyRequired)}/年
               </span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-xs text-slate-400">
+                  <tr className="text-left text-xs text-mist-400">
                     <th className="px-2 py-1.5 font-medium">更深層技術組合</th>
                     <th className="px-2 py-1.5 text-right font-medium">MAC</th>
                     <th className="px-2 py-1.5 text-right font-medium">Δ減碳量</th>
@@ -90,17 +90,17 @@ export function LeapfrogCCfDModule({
                 </thead>
                 <tbody>
                   {kpis.ccfdBreakdown.map((c, i) => (
-                    <tr key={i} className="border-t border-slate-100">
-                      <td className="px-2 py-1.5 font-medium text-slate-600">
+                    <tr key={i} className="border-t border-mist-100">
+                      <td className="px-2 py-1.5 font-medium text-mist-600">
                         [{c.leverIds.join(' + ')}]
                       </td>
-                      <td className="px-2 py-1.5 text-right text-slate-500">
+                      <td className="px-2 py-1.5 text-right font-mono text-mist-500">
                         €{c.mac.toFixed(0)}/tCO₂
                       </td>
-                      <td className="px-2 py-1.5 text-right text-slate-500">
+                      <td className="px-2 py-1.5 text-right font-mono text-mist-500">
                         {fmtNumber(c.abatementDelta)} tCO₂
                       </td>
-                      <td className="px-2 py-1.5 text-right font-semibold text-indigo-600">
+                      <td className="px-2 py-1.5 text-right font-mono font-semibold text-indigo-600">
                         €{fmtCurrency(c.subsidy)}/年
                       </td>
                     </tr>
@@ -168,26 +168,26 @@ function TechnologyElimination({
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="rounded-xl border border-mist-200 bg-white p-4 shadow-sm">
       <div className="mb-3 flex items-center gap-2">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-500">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rust-50 text-rust-500">
           <XCircle className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-slate-700">技術淘汰分析 (Technology Elimination)</h3>
-          <p className="text-xs text-slate-400">被成本有效前緣淘汰之技術</p>
+          <h3 className="text-sm font-semibold text-mist-700">技術淘汰分析 (Technology Elimination)</h3>
+          <p className="text-xs text-mist-400">被成本有效前緣淘汰之技術</p>
         </div>
       </div>
       <div className="space-y-2">
         {eliminatedLevers.map((l) => (
           <div
             key={l.id}
-            className="flex items-start gap-2 rounded-lg bg-red-50/50 px-3 py-2"
+            className="flex items-start gap-2 rounded-lg bg-rust-50/50 px-3 py-2"
           >
-            <span className="rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-600">
+            <span className="rounded bg-rust-100 px-2 py-0.5 font-mono text-xs font-bold text-rust-600">
               {l.id}
             </span>
-            <p className="text-sm text-slate-600">{l.reason}</p>
+            <p className="text-sm text-mist-600">{l.reason}</p>
           </div>
         ))}
       </div>
