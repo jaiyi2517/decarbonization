@@ -138,7 +138,7 @@ export function ExecutiveKPICards({ kpis }: ExecutiveKPICardsProps) {
             </div>
             <div>
               <div className="mb-1 flex items-center justify-between text-xs">
-                <span className="font-medium text-mist-500">營運支出 OPEX（折現現值）</span>
+                <span className="font-medium text-mist-500">總營運成本 OPEX（含基準成本，折現現值）</span>
                 <span className="font-mono font-bold text-mist-700">
                   €{fmtCurrency(kpis.totalPvOpex)} ({kpis.opexShare.toFixed(1)}%)
                 </span>

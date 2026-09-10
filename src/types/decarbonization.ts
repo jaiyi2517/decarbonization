@@ -15,8 +15,10 @@ export interface PlantBaselineInput {
   plantName: string;
   /** E0 — Baseline annual CO₂ emissions (tCO₂/year) */
   E0: number;
-  /** q — Total annual product output (tonnes/year, e.g. cement or steel) */
+  /** q — Total annual product output (units/year) */
   q: number;
+  /** w_base — Baseline unit operating cost before abatement levers (currency/unit) */
+  w_base: number;
   /** q_clinker — Optional intermediate product output (e.g. clinker tonnes/year, for process-emission ratio) */
   q_clinker?: number;
   /** T — Remaining plant/equipment evaluation period (years, default 25) */

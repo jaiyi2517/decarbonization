@@ -65,12 +65,12 @@ export function calculateDE(
   macro: MacroEconomicContext,
   capturedCO2: number,
 ): DEResult {
-  const { q, T, r } = plant;
+  const { q, w_base, T, r } = plant;
   const { c_TS } = macro;
 
   let totalCapex = 0;
   let totalFixedOpex = 0;
-  let totalVarOpexPerTonne = 0;
+  let totalVarOpexPerTonne = w_base;
 
   for (let i = 0; i < levers.length; i++) {
     if (vector[i] === 1) {
@@ -81,7 +81,7 @@ export function calculateDE(
     }
   }
 
-  // w_t(v⃗) = Δw_tech + c_TS · (E_captured / q)
+  // w_total(v⃗) = w_base + Σ varOpex_tech + c_TS · (E_captured / q)
   const tsCostPerTonne = q > 0 ? (c_TS * capturedCO2) / q : 0;
   const effectiveVarOpexPerTonne = totalVarOpexPerTonne + tsCostPerTonne;
 
@@ -656,6 +656,7 @@ export const plantTemplates: PlantTemplate[] = [
       plantName: '跨國電源與變壓系統製造總廠',
       E0: 120_000,
       q: 1_000_000,
+      w_base: 100,
       T: 20,
       r: 0.05,
     },
@@ -757,6 +758,7 @@ export const plantTemplates: PlantTemplate[] = [
       plantName: '自訂工廠',
       E0: 50_000,
       q: 500_000,
+      w_base: 100,
       T: 20,
       r: 0.05,
     },
