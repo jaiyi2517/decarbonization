@@ -48,7 +48,9 @@ export interface MacroEconomicContext {
 export type LeverType =
   | 'process_optimization'
   | 'raw_material_substitution'
-  | 'carbon_capture';
+  | 'carbon_capture'
+  | 'energy_substitution'
+  | 'product_innovation';
 
 /** Elementary (single) abatement lever */
 export interface AbatementLever {
@@ -68,6 +70,8 @@ export interface AbatementLever {
   standaloneAbatement: number;
   /** Capture rate for carbon-capture levers (e.g. 0.9 = 90%); undefined for non-capture levers */
   captureRate?: number;
+  /** Optional human-readable description of the lever */
+  description?: string;
 }
 
 /** Interaction type between levers in a combination */

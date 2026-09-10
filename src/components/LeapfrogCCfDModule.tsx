@@ -154,10 +154,10 @@ function TechnologyElimination({
   }
 
   for (const [id, mac] of leverMaxMAC) {
-    if (mac > carbonPrice * 2 && id === 'AS') {
+    if (mac > carbonPrice * 2) {
       eliminatedLevers.push({
         id,
-        reason: '變動營運成本 (OPEX) 過高 (€15/噸) — 在所有碳價水準下均被鈣循環 (Calcium Looping) 支配，不具經濟效益。',
+        reason: `邊際成本 (MAC) 過高 (€${mac.toFixed(0)}/tCO₂) — 在當前碳價水準下不具經濟效益，被其他更低成本的技術組合支配。`,
         mac,
       });
     }
